@@ -12,12 +12,12 @@ const PokemonList = () => {
             try {
                 setLoading(true);
                 const response = await axios.get(
-                    'https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}'
+                    `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`
                 );
                 const newPokemonList = response.data.results;
                 setPokemonList((prevList) => [...prevList, ...newPokemonList]);
                 setLoading(false);
-                setHasMore(newPokemonList.length > 0); // Check if there are more Pokemon to be fetched
+                setHasMore(newPokemonList.length > 0); // Check if there are more Pokemon
             } catch (error) {
                 console.error('Error fetching Pokemon list:', error);
                 setLoading(false);
@@ -48,15 +48,12 @@ const PokemonList = () => {
     return (
         <div>
             <h2>Pokemon List</h2>
-            {loading ? (
-                <p>Loading...</p>
-            ) : (
-                <ul>
-                    {pokemonList.map((pokemon, index) => (
-                        <li key={index}>{pokemon.name}</li>
-                    ))}
-                </ul>
-            )}
+            <ul>
+                {pokemonList.map((pokemon, index) => (
+                    <li key={index}>{pokemon.name}</li>
+                ))}
+            </ul>
+            {loading && <p>Loading...</p>}
         </div>
     );
 };
