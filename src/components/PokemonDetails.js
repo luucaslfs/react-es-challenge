@@ -5,6 +5,7 @@ const PokemonDetails = () => {
     const [pokemonNumber, setPokemonNumber] = useState('');
     const [pokemonName, setPokemonName] = useState('');
     const [pokemonTypes, setPokemonTypes] = useState([]);
+    const [pokemonSprite, setPokemonSprite] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleInputChange = (event) => {
@@ -18,14 +19,16 @@ const PokemonDetails = () => {
             const response = await axios.get(
                 `https://pokeapi.co/api/v2/pokemon/${pokemonNumber}`
             );
-            const { name, types } = response.data;
+            const { name, types, sprites } = response.data;
             setPokemonName(name);
             setPokemonTypes(types.map((typeData) => typeData.type.name));
+            setPokemonSprite(sprites.front_default);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching Pokemon details:', error);
             setPokemonName('Pokemon not found');
             setPokemonTypes([]);
+            setPokemonSprite('');
             setLoading(false);
         }
     };
@@ -37,6 +40,7 @@ const PokemonDetails = () => {
         } else {
             setPokemonName(''); // Reset the name if the input is empty
             setPokemonTypes([]);
+            setPokemonSprite('');
         }
     }, [pokemonNumber]);
 
@@ -61,6 +65,13 @@ const PokemonDetails = () => {
                     {pokemonName && <p>Pokemon Name: {pokemonName}</p>}
                     {pokemonTypes.length > 0 && (
                         <p>Pokemon Type(s): {pokemonTypes.join(', ')}</p>
+                    )}
+                    {pokemonSprite && (
+                        <img
+                            src={pokemonSprite}
+                            alt={pokemonName}
+                            style={{ width: '100px', height: '100px' }}
+                        />
                     )}
                 </>
             )}
