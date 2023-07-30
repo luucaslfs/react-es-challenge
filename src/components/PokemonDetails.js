@@ -11,26 +11,26 @@ const PokemonDetails = () => {
         setPokemonNumber(event.target.value);
     };
 
-    useEffect(() => {
-        // Function to fetch Pokemon details
-        const fetchPokemonDetails = async () => {
-            setLoading(true);
-            try {
-                const response = await axios.get(
-                    `https://pokeapi.co/api/v2/pokemon/${pokemonNumber}`
-                );
-                const { name, types } = response.data;
-                setPokemonName(name);
-                setPokemonTypes(types.map((typeData) => typeData.type.name));
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching Pokemon details:', error);
-                setPokemonName('Pokemon not found');
-                setPokemonTypes([]);
-                setLoading(false);
-            }
-        };
+    // Function to fetch Pokemon details
+    const fetchPokemonDetails = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get(
+                `https://pokeapi.co/api/v2/pokemon/${pokemonNumber}`
+            );
+            const { name, types } = response.data;
+            setPokemonName(name);
+            setPokemonTypes(types.map((typeData) => typeData.type.name));
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching Pokemon details:', error);
+            setPokemonName('Pokemon not found');
+            setPokemonTypes([]);
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         // Check if pokemonNumber is a valid number (e.g., not empty)
         if (pokemonNumber) {
             fetchPokemonDetails();
@@ -39,6 +39,11 @@ const PokemonDetails = () => {
             setPokemonTypes([]);
         }
     }, [pokemonNumber]);
+
+    const handleUpdateClick = () => {
+        // Trigger the API request whenever the "Update" button is clicked
+        fetchPokemonDetails();
+    };
 
     return (
         <div>
@@ -59,6 +64,7 @@ const PokemonDetails = () => {
                     )}
                 </>
             )}
+            <button onClick={handleUpdateClick}>Update</button>
         </div>
     );
 };
